@@ -802,7 +802,7 @@ spec:
       protocol: http
   sources:
   - kind: Service
-    namespace: flomesh
+    namespace: osm-system
     name: ingress-pipy-controller
 EOF
 ```
