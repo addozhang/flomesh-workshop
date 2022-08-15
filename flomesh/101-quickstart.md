@@ -37,7 +37,7 @@ osm-edge 的安装可通过 Helm、osm CLI 安装，推荐使用 CLI 的方式�
 ```shell
 system=$(uname -s | tr [:upper:] [:lower:])
 arch=$(dpkg --print-architecture)
-release=v1.1.0
+release=v1.1.1
 curl -L https://github.com/flomesh-io/osm-edge/releases/download/${release}/osm-edge-${release}-${system}-${arch}.tar.gz | tar -vxzf -
 ./${system}-${arch}/osm version
 cp ./${system}-${arch}/osm /usr/local/bin/
