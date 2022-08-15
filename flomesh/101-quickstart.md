@@ -58,7 +58,8 @@ osm install \
     --set=osm.deployPrometheus=true \
     --set=osm.deployGrafana=true \
     --set=osm.deployJaeger=true \
-    --set=osm.tracing.enable=true
+    --set=osm.tracing.enable=true \
+    --set=fsm.enabled=true
 ```
 
 检查组件是否启动并运行。
