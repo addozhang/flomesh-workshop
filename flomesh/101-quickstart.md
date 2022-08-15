@@ -672,6 +672,28 @@ spec:
   - kind: ServiceAccount
     name: bookbuyer
     namespace: bookbuyer
+
+---
+
+kind: TrafficTarget
+apiVersion: access.smi-spec.io/v1alpha3
+metadata:
+  name: bookstore-v2-access-bookwarehouse
+  namespace: bookwarehouse
+spec:
+  destination:
+    kind: ServiceAccount
+    name: bookwarehouse
+    namespace: bookwarehouse
+  rules:
+  - kind: HTTPRouteGroup
+    name: bookwarehouse-service-routes
+    matches:
+    - restock-books
+  sources:
+  - kind: ServiceAccount
+    name: bookstore-v2
+    namespace: bookstore
 EOF
 ```
 
