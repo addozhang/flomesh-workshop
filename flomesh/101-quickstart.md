@@ -26,7 +26,6 @@
 * [创建 Ingress](#创建-ingress)
 * [Grafana 监控](#grafana-监控)
 * [Jaeger 链路跟踪](#jaeger-链路跟踪)
-* [参考](#参考)
 
 ## 安装 osm-edge
 
@@ -130,6 +129,9 @@ kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main
 ```
 
 如果遇到域名 `raw.githubusercontent.com` 解析问题，请使用下面的命令进行部署。
+
+<details>
+  <summary>展开</summary>
 
 **bookstore**
 
@@ -426,6 +428,7 @@ spec:
           storage: 250M
 EOF
 ```
+</details>
 
 检查所有应用都正常启动并运行。
 
@@ -474,6 +477,9 @@ kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main
 ```
 
 或者：
+
+<details>
+  <summary>展开</summary>
 
 ```shell
 kubectl apply -f - <<EOF
@@ -578,6 +584,8 @@ spec:
 EOF
 ```
 
+</details>
+
 ## 灰度发布
 
 ### 部署 bookstore-v2
@@ -586,7 +594,10 @@ EOF
 kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main/manifests/apps/bookstore-v2.yaml
 ```
 
-或者
+或者:
+
+<details>
+  <summary>展开</summary>
 
 ```shell
 kubectl apply -f - <<EOF
@@ -696,6 +707,7 @@ spec:
     namespace: bookstore
 EOF
 ```
+</details>
 
 停止并重启 port-forward脚本。
 
@@ -854,6 +866,3 @@ osm dashboard
 在浏览器中打开下面的地址访问 Jaeger。
 
 * [http://localhost:16686](http://localhost:16686/) - **Grafana**
-
-## 参考
-
