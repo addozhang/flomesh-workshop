@@ -75,7 +75,7 @@ kubectl get po -n osm-system
 ```shell
 helm repo add fsm https://charts.flomesh.io
 
-export fsm_namespace=flomesh
+export fsm_namespace=osm-system
 helm install fsm fsm/fsm --namespace "$fsm_namespace" --create-namespace
 ```
 
