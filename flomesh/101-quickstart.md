@@ -25,7 +25,9 @@
   * [将所有流量导入 bookstore-v2](#将所有流量导入-bookstore-v2)
 * [创建 Ingress](#创建-ingress)
 * [Grafana 监控](#grafana-监控)
+  * [Dashboard](#dashboard)
 * [Jaeger 链路跟踪](#jaeger-链路跟踪)
+  * [功能](#功能)
 
 ## 安装 osm-edge
 
@@ -116,6 +118,12 @@ kubectl create namespace bookwarehouse
 
 ```shell
 osm namespace add bookstore bookbuyer bookthief bookwarehouse
+```
+
+收集命名空间中应用的指标：
+
+```
+osm metrics enable --namespace "bookstore,bookbuyer,bookthief,bookwarehouse"
 ```
 
 ### 部署应用
@@ -807,19 +815,16 @@ kind: Ingress
 metadata:
   name: bookstore
   namespace: bookstore
-  annotations:
-    pipy.ingress.kubernetes.io/rewrite-target-from: /bookstore
-    pipy.ingress.kubernetes.io/rewrite-target-to: /
 spec:
   ingressClassName: pipy
   rules:
   - http:
       paths:
-      - path: /bookstore
+      - path: /
         pathType: Prefix
         backend:
           service:
-            name: bookstore
+            name: bookstore-v2
             port:
               number: 14001
 ---
@@ -830,7 +835,7 @@ metadata:
   namespace: bookstore
 spec:
   backends:
-  - name: bookstore
+  - name: bookstore-v2
     port:
       number: 14001
       protocol: http
@@ -861,8 +866,24 @@ osm dashboard
 
 在浏览器中打开 Grafana 后，使用用户 `admin` 密码 `admin` 访问。
 
+### Dashboard
+
+* 控制平面与 sidecar
+* 数据面资源占用
+* Pod 到 Service 的指标
+* Service 到 Service 的指标
+* 工作负载到 Service 的指标
+* 工作负载到工作负载的指标
+
 ## Jaeger 链路跟踪
 
 在浏览器中打开下面的地址访问 Jaeger。
 
 * [http://localhost:16686](http://localhost:16686/) - **Grafana**
+
+### 功能
+
+* 搜索服务链路
+* 查看链路详情
+* 链路跟踪比较
+* 系统拓扑
