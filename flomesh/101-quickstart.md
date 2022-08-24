@@ -848,10 +848,6 @@ EOF
 
 浏览器中使用 ingress 的 IP 地址和端口访问 bookstore。
 
-```shell
-echo http://$ingress_host:$ingress_port/bookstore
-```
-
 ## Grafana 监控
 
 通过 osm CLI 安装的 Grafana，如果是本机访问，可以通过下面的命令打开 Grafana。
