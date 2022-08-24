@@ -83,7 +83,7 @@ helm install fsm fsm/fsm --namespace "$fsm_namespace" --create-namespace
 检查组件是否启动并运行。
 
 ```shell
-kubectl get po -n flomesh
+kubectl get po -n osm-system
 ```
 
 获取 ingress 的外部地址和端口，后面会用来访问后端应用。
