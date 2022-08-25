@@ -9,7 +9,6 @@
 * [安装 osm-edge](#安装-osm-edge)
   * [下载 CLI](#下载-cli)
   * [安装](#安装)
-* [安装 fsm ingress](#安装-fsm-ingress)
 * [部署示例应用](#部署示例应用)
   * [创建命名空间](#创建命名空间)
   * [将命名空间加入到网格中](#将命名空间加入到网格中)
@@ -67,32 +66,6 @@ osm install \
 
 ```shell
 kubectl get po -n osm-system
-```
-
-## 安装 fsm ingress
-
-同样使用 Helm 安装 fsm。
-
-```shell
-helm repo add fsm https://charts.flomesh.io
-
-export fsm_namespace=osm-system
-helm install fsm fsm/fsm --namespace "$fsm_namespace" --create-namespace
-```
-
-检查组件是否启动并运行。
-
-```shell
-kubectl get po -n osm-system
-```
-
-获取 ingress 的外部地址和端口，后面会用来访问后端应用。
-
-```shell
-export ingress_host="$(kubectl -n "$fsm_namespace" get service ingress-pipy-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
-export ingress_port="$(kubectl -n "$fsm_namespace" get service ingress-pipy-controller -o jsonpath='{.spec.ports[?(@.name=="http")].port}')"
-
-echo $ingress_host:$ingress_port
 ```
 
 ## 部署示例应用
