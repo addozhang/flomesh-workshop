@@ -37,7 +37,7 @@ osm-edge 的安装可通过 Helm、osm CLI 安装，推荐使用 CLI 的方式�
 ```shell
 system=$(uname -s | tr [:upper:] [:lower:])
 arch=$(dpkg --print-architecture)
-release=v1.1.1
+release=v1.1.2
 curl -L https://github.com/flomesh-io/osm-edge/releases/download/${release}/osm-edge-${release}-${system}-${arch}.tar.gz | tar -vxzf -
 ./${system}-${arch}/osm version
 cp ./${system}-${arch}/osm /usr/local/bin/
@@ -437,6 +437,14 @@ cp .env.example .env
 * [http://localhost:8083](http://localhost:8083/) - **bookthief**
 * [http://localhost:8084](http://localhost:8084/) - **bookstore**
 
+
+应用页面计数器清零：
+
+```shell
+export ingress_host=localhost
+curl -sIXGET http://$ingress_host:8083/reset http://$ingress_host:8084/reset http://$ingress_host:8080/reset http://$ingress_host:8082/reset
+```
+
 ## 访问控制
 
 **目标**：禁止 bookthief 从 bookstore 偷书，不影响书籍的正常购买。
@@ -768,7 +776,7 @@ metadata:
   name: bookstore-split
   namespace: bookstore
 spec:
-  service: bookstore.bookstore # <root-service>.<namespace>
+  service: bookstore.bookstore
   backends:
   - service: bookstore
     weight: 0
