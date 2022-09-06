@@ -823,7 +823,7 @@ spec:
   sources:
   - kind: Service
     namespace: osm-system
-    name: ingress-pipy-controller
+    name: fsm-ingress-pipy-controller
 EOF
 ```
 
