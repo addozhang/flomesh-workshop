@@ -206,7 +206,7 @@ pipy()
 
 > 可选链操作符 `?.` 访问对象的属性或者函数，对象是 `undefine` 或者 `null` 时直接返回 `undefaine` ，而不是抛出异常。
 
-### 配置
+## 配置
 
 - [`JSON.decode()`](https://flomesh.io/docs/zh/reference/api/JSON/decode)
 - [`pipy.load()`](https://flomesh.io/docs/zh/reference/api/pipy/load)
