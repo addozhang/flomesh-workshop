@@ -6,12 +6,16 @@
 
 - Linux [pipy.zip](https://github.com/flomesh-io/flomesh-workshop/files/9669761/pipy.zip)
 - macOS M1 [pipy.zip](https://github.com/flomesh-io/flomesh-workshop/files/9669873/pipy.zip)
+- macOS Intel [pipy.zip](https://github.com/flomesh-io/flomesh-workshop/files/9670338/pipy.zip)
+
 
 ```shell
 #linux
 wget https://github.com/flomesh-io/flomesh-workshop/files/9669761/pipy.zip
-#macos M1
+#macOS M1
 wget https://github.com/flomesh-io/flomesh-workshop/files/9669873/pipy.zip
+#macOS Intel
+wget https://github.com/flomesh-io/flomesh-workshop/files/9670338/pipy.zip
 unzip pipy.zip -d .
 cp ./pipy /usr/local/bin/pipy
 ```
