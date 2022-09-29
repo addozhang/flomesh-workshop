@@ -8,6 +8,8 @@
 
 ```shell
 wget https://github.com/flomesh-io/pipy/releases/download/0.50.0-25/pipy-0.50.0-25-generic_linux-x86_64.tar.gz
+tar -zxf pipy-0.50.0-25-generic_linux-x86_64.tar.gz
+cp ./usr/local/bin/pipy /usr/local/bin/pipy
 ```
 
 ### 从源码构建
