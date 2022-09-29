@@ -4,10 +4,14 @@
 
 ### 下载二进制包
 
-[pipy.zip](https://github.com/flomesh-io/flomesh-workshop/files/9669761/pipy.zip)
+- Linux [pipy.zip](https://github.com/flomesh-io/flomesh-workshop/files/9669761/pipy.zip)
+- macOS M1 [pipy.zip](https://github.com/flomesh-io/flomesh-workshop/files/9669873/pipy.zip)
 
 ```shell
+#linux
 wget https://github.com/flomesh-io/flomesh-workshop/files/9669761/pipy.zip
+#macos M1
+wget https://github.com/flomesh-io/flomesh-workshop/files/9669873/pipy.zip
 unzip pipy.zip -d .
 cp ./pipy /usr/local/bin/pipy
 ```
