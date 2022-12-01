@@ -27,8 +27,8 @@ cp ./pipy /usr/local/bin/pipy
 从 Pipy 的 [release 页面](https://github.com/flomesh-io/pipy/releases) 下载。
 
 ```shell
-wget https://github.com/flomesh-io/pipy/releases/download/0.50.0-25/pipy-0.50.0-25-generic_linux-x86_64.tar.gz
-tar -zxf pipy-0.50.0-25-generic_linux-x86_64.tar.gz
+wget https://github.com/flomesh-io/pipy/releases/download/0.70.0-2/pipy-0.70.0-2-generic_linux-x86_64.tar.gz
+tar -zxf pipy-0.70.0-2-generic_linux-x86_64.tar.gz
 cp ./usr/local/bin/pipy /usr/local/bin/pipy
 ```
 </details>
