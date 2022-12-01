@@ -4,9 +4,9 @@
 
 返回静态内容
 
-- [`listen`](https://flomesh.io/docs/en/reference/api/Configuration/listen)
-- [`serveHTTP`](https://flomesh.io/docs/en/reference/api/Configuration/serveHTTP)
-- [`Message`](https://flomesh.io/docs/en/reference/api/Message)
+- [`listen`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/listen)
+- [`serveHTTP`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/serveHTTP)
+- [`Message`](https://flomesh.io/pipy/docs/en/reference/api/Message)
 
 ```js
 pipy()  
@@ -40,7 +40,7 @@ pipy()
 
 ### 4 层代理
 
-- [`connect`](https://flomesh.io/docs/en/reference/api/Configuration/connect)
+- [`connect`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/connect)
 
 ```js
 pipy()  
@@ -51,10 +51,10 @@ pipy()
 
 ### 7 层代理
 
-- [`demuxHTTP`](https://flomesh.io/docs/en/reference/api/Configuration/demuxHTTP)
-- [`muxHTTP`](https://flomesh.io/docs/en/reference/api/Configuration/muxHTTP)
+- [`demuxHTTP`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/demuxHTTP)
+- [`muxHTTP`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/muxHTTP)
 - 子管道
-- [`to`](https://flomesh.io/docs/en/reference/api/Configuration/to)
+- [`to`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/to)
 
 ```js
 pipy()  
@@ -85,10 +85,10 @@ pipy()
 
 ## 路由
 
-- [`URLRouter`](https://flomesh.io/docs/en/reference/api/algo/URLRouter)
-- [`handleMessageStart`](https://flomesh.io/docs/en/reference/api/Configuration/handleMessageStart)
-- [`branch`](https://flomesh.io/docs/en/reference/api/Configuration/branch)
-- [`replaceMessage`](https://flomesh.io/docs/en/reference/api/Configuration/replaceMessage)
+- [`URLRouter`](https://flomesh.io/pipy/docs/en/reference/api/algo/URLRouter)
+- [`handleMessageStart`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/handleMessageStart)
+- [`branch`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/branch)
+- [`replaceMessage`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/replaceMessage)
 - 匿名函数
 - 变量定义
   - 全局变量
@@ -163,7 +163,7 @@ pipy()
 
 ## 负载均衡
 
-- [`RoundRobinLoadBalancer`](https://flomesh.io/docs/en/reference/api/algo/RoundRobinLoadBalancer)
+- [`RoundRobinLoadBalancer`](https://flomesh.io/pipy/docs/en/reference/api/algo/RoundRobinLoadBalancer)
 
 ```js
 ((  
@@ -208,8 +208,8 @@ pipy()
 
 ## 配置
 
-- [`JSON.decode()`](https://flomesh.io/docs/zh/reference/api/JSON/decode)
-- [`pipy.load()`](https://flomesh.io/docs/zh/reference/api/pipy/load)
+- [`JSON.decode()`](https://flomesh.io/pipy/docs/zh/reference/api/JSON/decode)
+- [`pipy.load()`](https://flomesh.io/pipy/docs/zh/reference/api/pipy/load)
 - [`Object.entries()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/entries)
 
 #### JSON 配置
@@ -281,10 +281,10 @@ pipy()
 
 ## 插件
 
-- [`solve`](https://flomesh.io/docs/zh/reference/api/pipy/solve)
-- [`chain`](https://flomesh.io/docs/zh/reference/api/Configuration/chain)
-- [`export`](https://flomesh.io/docs/zh/reference/api/Configuration/export)
-- [`import`](https://flomesh.io/docs/zh/reference/api/Configuration/import)
+- [`solve`](https://flomesh.io/pipy/docs/zh/reference/api/pipy/solve)
+- [`chain`](https://flomesh.io/pipy/docs/zh/reference/api/Configuration/chain)
+- [`export`](https://flomesh.io/pipy/docs/zh/reference/api/Configuration/export)
+- [`import`](https://flomesh.io/pipy/docs/zh/reference/api/Configuration/import)
 
 目前已实现的功能：
 
