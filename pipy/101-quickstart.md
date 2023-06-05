@@ -1,5 +1,50 @@
 # 101 Quickstart
 
+## 静态站
+
+- [`listen`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/listen)
+- [`demuxHTTP`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/demuxHTTP)
+- [`replaceMessage`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/replaceMessage)
+- [`Message`](https://flomesh.io/pipy/docs/en/reference/api/Message)
+
+`index.html`
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, People!</title>
+  </head>
+  <body>
+    <h1>The Quick Brown Fox Jumps Over the Lazy Dog</h1>
+    <h2>The Quick Brown Fox Jumps Over the Lazy Dog</h2>
+    <h3>The Quick Brown Fox Jumps Over the Lazy Dog</h3>
+    <h4>The Quick Brown Fox Jumps Over the Lazy Dog</h4>
+    <h5>The Quick Brown Fox Jumps Over the Lazy Dog</h5>
+    <h6>The Quick Brown Fox Jumps Over the Lazy Dog</h6>
+  </body>
+</html>
+
+```
+
+```javascript
+pipy({
+  _files: Object.fromEntries(
+    pipy.list('.').map(f => ([`/${f}`, http.File.from(`./${f}`)])).concat([['/', http.File.from('./index.html')]])
+    ),
+})
+
+  .listen(8080)
+  .demuxHTTP().to($ => $.replaceMessage(
+    msg => (
+      _files[msg.head.path]?.toMessage?.(msg.head.headers['accept-encoding']) || new Message({ status: 404 }, 'not found!\n')
+    )
+  ))
+
+```
+
+> 可选链操作符 `?.` 访问对象的属性或者函数，对象是 `undefine` 或者 `null` 时直接返回 `undefaine` ，而不是抛出异常。
+
 ## Web 服务
 
 返回静态内容
@@ -53,7 +98,7 @@ pipy()
 
 - [`demuxHTTP`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/demuxHTTP)
 - [`muxHTTP`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/muxHTTP)
-- 子管道
+- [子管道](https://flomesh.io/pipy/docs/en/intro/concepts#sub-pipeline)
 - [`to`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/to)
 
 ```js
@@ -98,9 +143,9 @@ pipy()
 #### Javascript 匿名函数
 
 ```js
-//匿名函数
+//定义匿名函数
 (function() {})
-//匿名函数调用
+//调用匿名函数
 (function() {})()
 ```
 
@@ -204,8 +249,6 @@ pipy()
 )()
 ```
 
-> 可选链操作符 `?.` 访问对象的属性或者函数，对象是 `undefine` 或者 `null` 时直接返回 `undefaine` ，而不是抛出异常。
-
 ## 配置
 
 - [`JSON.decode()`](https://flomesh.io/pipy/docs/zh/reference/api/JSON/decode)
@@ -295,7 +338,7 @@ pipy()
 
 `config.json`
 
-配置插件列表
+增加插件列表配置
 
 ```json
 {  
@@ -309,10 +352,16 @@ pipy()
 }
 ```
 
-#### 使用插件 
+#### 使用插件
 
 - `chain` 指定多个插件
 - `chain` 不指定插件
+
+`config.js`
+
+```javascript
+JSON.decode(pipy.load('config.json'))
+```
 
 `proxy.js`
 
@@ -394,4 +443,13 @@ pipy()
   )  
   
 )()
+```
+
+`default.js`
+
+```javascript
+pipy()  
+  
+  .pipeline()  
+  .replaceMessage(new Message({ status: 404 }, 'No handler'))
 ```
