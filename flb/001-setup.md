@@ -1,10 +1,9 @@
-## 前提条件
+### 前提条件
 
-4c8g VM * 1
+- 4c16g VM * 1 (FLB 控制面)
+- 2c8g VM * 1 (FLB 数据面)
 
-## 准备
-
-### Helm
+### 准备
 
 ```shell
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
@@ -20,8 +19,6 @@ curl -sfL https://get.k3s.io | sh -s - --disable traefik --disable metrics-serve
 ```shell
 kubectl create ns flomesh
 ```
-
-## 部署
 
 ### Prometheus
 
@@ -130,8 +127,6 @@ spec:
           periodSeconds: 10
 EOF
 ```
-
-cur
 
 ### ClickHouse
 
