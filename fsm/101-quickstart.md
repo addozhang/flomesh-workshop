@@ -1,12 +1,12 @@
 # 快速入门
 
 课程目标：
-* osm-edge 的安装
-* 通过实例应用了解 osm-edge 的基本功能
+* FSM 的安装
+* 通过实例应用了解 FSM 的基本功能
 
 > 环境准备，参考 [环境搭建](./001-setup-env.md)。
 
-* [安装 osm-edge](#安装-osm-edge)
+* [安装 FSM](#安装-fsm)
   * [下载 CLI](#下载-cli)
   * [安装](#安装)
 * [部署示例应用](#部署示例应用)
@@ -18,8 +18,8 @@
   * [关闭宽松流量策略模式](#关闭宽松流量策略模式)
   * [部署流量访问策略](#部署流量访问策略)
 * [灰度发布](#灰度发布)
-  * [部署 bookstore-v2](#部署-bookstore-v2)
   * [初始化流量拆分策略](#初始化流量拆分策略)
+  * [部署 bookstore-v2](#部署-bookstore-v2)
   * [调整 bookstore-v2 的权重](#调整-bookstore-v2-的权重)
   * [将所有流量导入 bookstore-v2](#将所有流量导入-bookstore-v2)
 * [创建 Ingress](#创建-ingress)
@@ -28,19 +28,19 @@
 * [Jaeger 链路跟踪](#jaeger-链路跟踪)
   * [功能](#功能)
 
-## 安装 osm-edge
+## 安装 FSM
 
-osm-edge 的安装可通过 Helm、osm CLI 安装，推荐使用 CLI 的方式安装。
+FSM 的安装可通过 Helm、FSM CLI 安装，推荐使用 CLI 的方式安装。
 
 ### 下载 CLI
 
 ```shell
-system=$(uname -s | tr [:upper:] [:lower:])
-arch=$(dpkg --print-architecture)
-release=v1.1.2
-curl -L https://github.com/flomesh-io/osm-edge/releases/download/${release}/osm-edge-${release}-${system}-${arch}.tar.gz | tar -vxzf -
-./${system}-${arch}/osm version
-cp ./${system}-${arch}/osm /usr/local/bin/
+system=$(uname -s | tr '[:upper:]' '[:lower:]')
+arch=$(uname -m | sed -E 's/x86_/amd/' | sed -E 's/aarch/arm/')
+release=v1.1.0
+curl -L https://github.com/flomesh-io/fsm/releases/download/${release}/fsm-${release}-${system}-${arch}.tar.gz | tar -vxzf -
+./${system}-amd64/fsm version
+cp ./${system}-${arch}/fsm /usr/local/bin/
 ```
 
 ### 安装
@@ -48,24 +48,23 @@ cp ./${system}-${arch}/osm /usr/local/bin/
 通过参数设置会安装 Prometheus、Grafana、Jaeger、fsm，并开启宽松流量模式和链路跟踪。
 
 ```shell
-export osm_namespace=osm-system 
-export osm_mesh_name=osm 
+export fsm_namespace=fsm-system
+export fsm_mesh_name=fsm
 
-osm install \
-    --mesh-name "$osm_mesh_name" \
-    --osm-namespace "$osm_namespace" \
-    --set=osm.enablePermissiveTrafficPolicy=true \
-    --set=osm.deployPrometheus=true \
-    --set=osm.deployGrafana=true \
-    --set=osm.deployJaeger=true \
-    --set=osm.tracing.enable=true \
-    --set=fsm.enabled=true
+fsm install \
+    --mesh-name "$fsm_mesh_name" \
+    --fsm-namespace "$fsm_namespace" \
+    --set=fsm.enablePermissiveTrafficPolicy=true \
+    --set=fsm.fsmIngress.enabled=true \
+    --set=fsm.deployPrometheus=true \
+    --set=fsm.deployGrafana=true \
+    --set=fsm.deployJaeger=true
 ```
 
 检查组件是否启动并运行。
 
 ```shell
-kubectl get po -n osm-system
+kubectl get po -n fsm-system
 ```
 
 ## 部署示例应用
@@ -90,23 +89,23 @@ kubectl create namespace bookwarehouse
 ### 将命名空间加入到网格中
 
 ```shell
-osm namespace add bookstore bookbuyer bookthief bookwarehouse
+fsm namespace add bookstore bookbuyer bookthief bookwarehouse
 ```
 
 收集命名空间中应用的指标：
 
-```
-osm metrics enable --namespace "bookstore,bookbuyer,bookthief,bookwarehouse"
+```shell
+fsm metrics enable --namespace "bookstore,bookbuyer,bookthief,bookwarehouse"
 ```
 
 ### 部署应用
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main/manifests/apps/bookbuyer.yaml
-kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main/manifests/apps/bookthief.yaml
-kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main/manifests/apps/bookstore.yaml
-kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main/manifests/apps/bookwarehouse.yaml
-kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main/manifests/apps/mysql.yaml
+kubectl apply -f https://raw.githubusercontent.com/flomesh-io/fsm-docs/main/manifests/apps/bookbuyer.yaml
+kubectl apply -f https://raw.githubusercontent.com/flomesh-io/fsm-docs/main/manifests/apps/bookthief.yaml
+kubectl apply -f https://raw.githubusercontent.com/flomesh-io/fsm-docs/main/manifests/apps/bookstore.yaml
+kubectl apply -f https://raw.githubusercontent.com/flomesh-io/fsm-docs/main/manifests/apps/bookwarehouse.yaml
+kubectl apply -f https://raw.githubusercontent.com/flomesh-io/fsm-docs/main/manifests/apps/mysql.yaml
 ```
 
 如果遇到域名 `raw.githubusercontent.com` 解析问题，请使用下面的命令进行部署。
@@ -146,8 +145,6 @@ spec:
         version: v1
     spec:
       serviceAccountName: bookbuyer
-      nodeSelector:
-        kubernetes.io/os: linux
       containers:
         - name: bookbuyer
           image: flomesh/bookbuyer:latest
@@ -192,8 +189,6 @@ spec:
         version: v1
     spec:
       serviceAccountName: bookthief
-      nodeSelector:
-        kubernetes.io/os: linux
       containers:
         - name: bookthief
           image: flomesh/bookthief:latest
@@ -213,7 +208,10 @@ EOF
 
 ```shell
 kubectl apply -f - <<EOF
-# Create bookstore Service
+# Create bookstore root Service.
+# This is the service clients direct traffic to which is also
+# used as the root service in a TrafficSplit configuration when
+# splitting traffic to multiple versions of the backend app.
 apiVersion: v1
 kind: Service
 metadata:
@@ -227,6 +225,25 @@ spec:
     name: bookstore-port
   selector:
     app: bookstore
+
+---
+
+# Create bookstore-v1 service
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookstore-v1
+  namespace: bookstore
+  labels:
+    app: bookstore
+    version: v1
+spec:
+  ports:
+  - port: 14001
+    name: bookstore-port
+  selector:
+    app: bookstore
+    version: v1
 
 ---
 
@@ -250,14 +267,14 @@ spec:
   selector:
     matchLabels:
       app: bookstore
+      version: v1
   template:
     metadata:
       labels:
         app: bookstore
+        version: v1
     spec:
       serviceAccountName: bookstore
-      nodeSelector:
-        kubernetes.io/os: linux
       containers:
         - name: bookstore
           image: flomesh/bookstore:latest
@@ -323,8 +340,6 @@ spec:
         version: v1
     spec:
       serviceAccountName: bookwarehouse
-      nodeSelector:
-        kubernetes.io/os: linux
       containers:
         - name: bookwarehouse
           image: flomesh/bookwarehouse:latest
@@ -375,8 +390,6 @@ spec:
         app: mysql
     spec:
       serviceAccountName: mysql
-      nodeSelector:
-        kubernetes.io/os: linux
       containers:
       - image: mariadb:10.7.4
         name: mysql
@@ -425,10 +438,10 @@ kubectl get pod,svc -n bookwarehouse
 使用 port-forward 的方式来访问应用。
 
 ```shell
-git clone https://github.com/flomesh-io/osm-edge.git -b release-v1.1
-cd osm-edge
+git clone https://github.com/flomesh-io/fsm.git -b main
+cd fsm
 cp .env.example .env
-./scripts/port-forward-all.sh #可以忽略错误信息
+./scripts/port-forward-all.sh
 ```
 
 浏览器访问应用（将 `localhost` 替换成主机的 IP 地址，下同）。
@@ -438,7 +451,7 @@ cp .env.example .env
 * [http://localhost:8084](http://localhost:8084/) - **bookstore**
 
 
-应用页面计数器清零：
+应用页面计数器清零（创建 ingress 后可使用）：
 
 ```shell
 export ingress_host=localhost
@@ -452,7 +465,7 @@ curl -sIXGET http://$ingress_host:8083/reset http://$ingress_host:8084/reset htt
 ### 关闭宽松流量策略模式
 
 ```shell
-kubectl patch meshconfig osm-mesh-config -n osm-system -p '{"spec":{"traffic":{"enablePermissiveTrafficPolicyMode":false}}}'  --type=merge
+kubectl patch meshconfig fsm-mesh-config -n fsm-system -p '{"spec":{"traffic":{"enablePermissiveTrafficPolicyMode":false}}}'  --type=merge
 ```
 
 检查 bookthief 和 bookbuyer 的计数器。
@@ -462,7 +475,7 @@ kubectl patch meshconfig osm-mesh-config -n osm-system -p '{"spec":{"traffic":{"
 部署访问策略，允许正常的访问，然后检查页面上计数器的变化。
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main/manifests/access/traffic-access-v1.yaml
+kubectl apply -f https://raw.githubusercontent.com/flomesh-io/fsm-docs/main/manifests/access/traffic-access-v1.yaml
 ```
 
 或者：
@@ -577,10 +590,33 @@ EOF
 
 ## 灰度发布
 
+### 初始化流量拆分策略
+
+```shell
+kubectl apply -f https://raw.githubusercontent.com/flomesh-io/fsm-docs/main/manifests/split/traffic-split-v1.yaml
+```
+
+或者
+
+```shell
+kubectl apply -f - <<EOF
+apiVersion: split.smi-spec.io/v1alpha2
+kind: TrafficSplit
+metadata:
+  name: bookstore-split
+  namespace: bookstore
+spec:
+  service: bookstore.bookstore # <root-service>.<namespace>
+  backends:
+  - service: bookstore-v1 # matches app:bookstore,version:v1
+    weight: 100
+EOF
+```
+
 ### 部署 bookstore-v2
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main/manifests/apps/bookstore-v2.yaml
+kubectl apply -f https://raw.githubusercontent.com/flomesh-io/fsm-docs/main/manifests/apps/bookstore-v2.yaml
 ```
 
 或者:
@@ -597,13 +633,15 @@ metadata:
   name: bookstore-v2
   namespace: bookstore
   labels:
-    app: bookstore-v2
+    app: bookstore
+    version: v2
 spec:
   ports:
   - port: 14001
     name: bookstore-port
   selector:
-    app: bookstore-v2
+    app: bookstore
+    version: v2
 
 ---
 
@@ -626,15 +664,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bookstore-v2
+      app: bookstore
+      version: v2
   template:
     metadata:
       labels:
-        app: bookstore-v2
+        app: bookstore
+        version: v2
     spec:
       serviceAccountName: bookstore-v2
-      nodeSelector:
-        kubernetes.io/os: linux
       containers:
         - name: bookstore
           image: flomesh/bookstore:latest
@@ -672,35 +710,13 @@ spec:
   - kind: ServiceAccount
     name: bookbuyer
     namespace: bookbuyer
-
----
-
-kind: TrafficTarget
-apiVersion: access.smi-spec.io/v1alpha3
-metadata:
-  name: bookstore-v2-access-bookwarehouse
-  namespace: bookwarehouse
-spec:
-  destination:
-    kind: ServiceAccount
-    name: bookwarehouse
-    namespace: bookwarehouse
-  rules:
-  - kind: HTTPRouteGroup
-    name: bookwarehouse-service-routes
-    matches:
-    - restock-books
-  sources:
-  - kind: ServiceAccount
-    name: bookstore-v2
-    namespace: bookstore
 EOF
 ```
 </details>
 
 停止并重启 port-forward脚本。
 
-```
+```shell
 ./scripts/port-forward-all.sh
 ```
 
@@ -708,35 +724,12 @@ EOF
 
 * [http://localhost:8082](http://localhost:8082/) - **bookstore-v2**
 
-### 初始化流量拆分策略
-
-```shell
-kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main/manifests/split/traffic-split-v1.yaml
-```
-
-或者
-
-```shell
-kubectl apply -f - <<EOF
-apiVersion: split.smi-spec.io/v1alpha2
-kind: TrafficSplit
-metadata:
-  name: bookstore-split
-  namespace: bookstore
-spec:
-  service: bookstore.bookstore
-  backends:
-  - service: bookstore
-    weight: 100
-EOF
-```
-
 ### 调整 bookstore-v2 的权重
 
 将 50% 的流量放行到 bookstore-v2 中。
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main/manifests/split/traffic-split-50-50.yaml
+kubectl apply -f https://raw.githubusercontent.com/flomesh-io/fsm-docs/main/manifests/split/traffic-split-50-50.yaml
 ```
 
 或者
@@ -751,7 +744,7 @@ metadata:
 spec:
   service: bookstore.bookstore
   backends:
-  - service: bookstore
+  - service: bookstore-v1
     weight: 50
   - service: bookstore-v2
     weight: 50
@@ -763,7 +756,7 @@ EOF
 ### 将所有流量导入 bookstore-v2
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/flomesh-io/osm-edge-docs/main/manifests/split/traffic-split-v2.yaml
+kubectl apply -f https://raw.githubusercontent.com/flomesh-io/fsm-docs/main/manifests/split/traffic-split-v2.yaml
 ```
 
 或者
@@ -778,7 +771,7 @@ metadata:
 spec:
   service: bookstore.bookstore
   backends:
-  - service: bookstore
+  - service: bookstore-v1
     weight: 0
   - service: bookstore-v2
     weight: 100
@@ -810,7 +803,7 @@ spec:
               number: 14001
 ---
 kind: IngressBackend
-apiVersion: policy.openservicemesh.io/v1alpha1
+apiVersion: policy.flomesh.io/v1alpha1
 metadata:
   name: bookstore
   namespace: bookstore
@@ -822,19 +815,19 @@ spec:
       protocol: http
   sources:
   - kind: Service
-    namespace: osm-system
-    name: fsm-ingress-pipy-controller
+    namespace: fsm-system
+    name: fsm-ingress
 EOF
 ```
 
-浏览器中使用 ingress 的 IP 地址和端口访问 bookstore。
+浏览器中使用 ingress 的 IP 地址和端口访问 bookstore-v2。
 
 ## Grafana 监控
 
-通过 osm CLI 安装的 Grafana，如果是本机访问，可以通过下面的命令打开 Grafana。
+通过 FSM CLI 安装的 Grafana，如果是本机访问，可以通过下面的命令打开 Grafana。
 
 ```shell
-osm dashboard
+fsm dashboard
 ```
 
 如果是访问远程远端的 cluster，继续使用上面的 port-forward 脚本，并使用下面的地址访问。
