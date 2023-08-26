@@ -18,6 +18,9 @@
 ---
   host: "192.168.1.12"
   port: 30123
+  user: "flomesh"
+  database: "default"
+  password: "flomesh"   
 ```
 
 创建日志组件 `log`：
