@@ -438,7 +438,7 @@ kubectl get pod,svc -n bookwarehouse
 使用 port-forward 的方式来访问应用。
 
 ```shell
-git clone https://github.com/flomesh-io/fsm.git -b main
+git clone https://github.com/flomesh-io/fsm.git -b release/v1.1
 cd fsm
 cp .env.example .env
 ./scripts/port-forward-all.sh
