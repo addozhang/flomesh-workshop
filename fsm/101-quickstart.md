@@ -58,7 +58,8 @@ fsm install \
     --set=fsm.fsmIngress.enabled=true \
     --set=fsm.deployPrometheus=true \
     --set=fsm.deployGrafana=true \
-    --set=fsm.deployJaeger=true
+    --set=fsm.deployJaeger=true \
+    --set=fsm.tracing.enable=true
 ```
 
 检查组件是否启动并运行。
