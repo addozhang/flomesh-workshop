@@ -219,8 +219,6 @@ kubectl apply -n flomesh -f - <<EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    prometheus.io/scrape: 'true'
   labels:
     app: pipy-repo
   name: pipy-repo
@@ -243,6 +241,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    prometheus.io/scrape: 'true'
   labels:
     app: pipy-repo
   name: pipy-repo
