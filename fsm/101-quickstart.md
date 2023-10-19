@@ -37,7 +37,7 @@ FSM 的安装可通过 Helm、FSM CLI 安装，推荐使用 CLI 的方式安装�
 ```shell
 system=$(uname -s | tr '[:upper:]' '[:lower:]')
 arch=$(uname -m | sed -E 's/x86_/amd/' | sed -E 's/aarch/arm/')
-release=v1.1.0
+release=v1.1.1
 curl -L https://github.com/flomesh-io/fsm/releases/download/${release}/fsm-${release}-${system}-${arch}.tar.gz | tar -vxzf -
 ./${system}-amd64/fsm version
 cp ./${system}-${arch}/fsm /usr/local/bin/
