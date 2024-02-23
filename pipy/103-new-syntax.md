@@ -225,7 +225,6 @@ var balancer = pipeline($ => $
     var lb = balancers[$ctx?.route]
     if (lb) {
       $conn = lb.allocate()
-      console.log(`$conn: ${JSON.stringify($conn.target)}`)
       if ($conn) {
         return 'proxy'
       }
@@ -235,7 +234,9 @@ var balancer = pipeline($ => $
     'proxy': ($ => $
       .muxHTTP(() => $conn).to($ => $
         .connect(() => $conn.target)
-      )),
+      )
+      .onEnd(() => $conn.free())
+    ),
     'pass': $ => $.pipeNext()
   })
 )
@@ -416,7 +417,9 @@ export default pipeline($ => $
     'proxy': ($ => $
       .muxHTTP(() => $conn).to($ => $
         .connect(() => $conn.target)
-      )),
+      )
+      .onEnd(() => $conn.free())
+    ),
     'pass': $ => $.pipeNext()
   })
 )
