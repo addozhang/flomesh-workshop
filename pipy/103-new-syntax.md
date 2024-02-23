@@ -28,14 +28,12 @@
 ```
 
 ```javascript
-var files = Object.fromEntries(
-  pipy.list('.').map(f => ([`/${f}`, http.File.from(`./${f}`)])).concat([['/', http.File.from('./index.html')]])
-)
+var site = new http.Directory('.', {fs: false})
 
 pipy.listen(8080, ($ => $
   .demuxHTTP().to($ => $.replaceMessage(
-    msg => (
-      files[msg.head.path]?.toMessage?.(msg.head.headers['accept-encoding']) || new Message({ status: 404 }, 'not found!\n')
+    req => (
+      site.serve(req) || new Message({ status: 404 }, 'not found!\n')
     )
   ))
 ))
