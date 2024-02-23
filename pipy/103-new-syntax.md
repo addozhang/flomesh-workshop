@@ -407,7 +407,6 @@ export default pipeline($ => $
     var lb = balancers[$ctx?.route]
     if (lb) {
       $conn = lb.allocate()
-      console.log(`$conn: ${JSON.stringify($conn.target)}`)
       if ($conn) {
         return 'proxy'
       }
