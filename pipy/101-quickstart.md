@@ -1,6 +1,6 @@
 # 101 Quickstart
 
-## 静态站
+## 1. 静态站
 
 - [`listen`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/listen)
 - [`demuxHTTP`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/demuxHTTP)
@@ -45,7 +45,7 @@ pipy({
 
 > 可选链操作符 `?.` 访问对象的属性或者函数，对象是 `undefine` 或者 `null` 时直接返回 `undefaine` ，而不是抛出异常。
 
-## Web 服务
+## 2. Web 服务
 
 返回静态内容
 
@@ -81,7 +81,7 @@ pipy()
   )
 ```
 
-## 反向代理
+## 3. 反向代理
 
 ### 4 层代理
 
@@ -128,7 +128,7 @@ pipy()
   )
 ```
 
-## 路由
+## 4. 路由
 
 - [`URLRouter`](https://flomesh.io/pipy/docs/en/reference/api/algo/URLRouter)
 - [`handleMessageStart`](https://flomesh.io/pipy/docs/en/reference/api/Configuration/handleMessageStart)
@@ -140,7 +140,7 @@ pipy()
   - 模块变量
   - 上下文变量
 
-#### Javascript 匿名函数
+### Javascript 匿名函数
 
 ```js
 //定义匿名函数
@@ -163,7 +163,7 @@ pipy()
 ) => pipy())()
 ```
 
-#### 实现
+### 实现
 
 ```js
 ((  
@@ -206,7 +206,7 @@ pipy()
 
 > 通过函数来获取变量的值 `() => _target
 
-## 负载均衡
+## 5. 负载均衡
 
 - [`RoundRobinLoadBalancer`](https://flomesh.io/pipy/docs/en/reference/api/algo/RoundRobinLoadBalancer)
 
@@ -249,13 +249,13 @@ pipy()
 )()
 ```
 
-## 配置
+## 6. 配置
 
 - [`JSON.decode()`](https://flomesh.io/pipy/docs/zh/reference/api/JSON/decode)
 - [`pipy.load()`](https://flomesh.io/pipy/docs/zh/reference/api/pipy/load)
 - [`Object.entries()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/entries)
 
-#### JSON 配置
+### JSON 配置
 
 映射关系：
 
@@ -278,7 +278,7 @@ pipy()
 }
 ```
 
-#### 加载配置
+### 加载配置
 
 ```js
 ((  
@@ -299,7 +299,7 @@ pipy()
 )()
 ```
 
-#### 使用配置
+### 使用配置
 
 ```js
 .listen(config.listen)
@@ -322,7 +322,7 @@ pipy()
 )
 ```
 
-## 插件
+## 7. 插件
 
 - [`solve`](https://flomesh.io/pipy/docs/zh/reference/api/pipy/solve)
 - [`chain`](https://flomesh.io/pipy/docs/zh/reference/api/Configuration/chain)
@@ -334,7 +334,7 @@ pipy()
 - 路由
 - 负载均衡
 
-#### 插件配置
+### 插件配置
 
 `config.json`
 
@@ -352,7 +352,7 @@ pipy()
 }
 ```
 
-#### 使用插件
+### 使用插件
 
 - `chain` 指定多个插件
 - `chain` 不指定插件
